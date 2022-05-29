@@ -31,6 +31,9 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var c1: UIButton!
     
+    
+    @IBOutlet weak var NoughtScore: UILabel!
+    @IBOutlet weak var CrossScore: UILabel!
     @IBOutlet weak var c2: UIButton!
     @IBOutlet weak var c3: UIButton!
     
@@ -40,6 +43,8 @@ class ViewController: UIViewController {
     var NOUGHT =  "O"
     var CROSS  =  "X"
     var board = [UIButton]()
+    var crossesScore = 0
+    var noughtsScore = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,16 +82,77 @@ class ViewController: UIViewController {
     @IBAction func boardTapAction(_ sender: UIButton) {
         
         addToBoard(sender)
-
+       
+        if checkForVictory(CROSS)
+                {
+                    crossesScore += 1
+            CrossScore.text = String(crossesScore)
+            
+            result(title: "Crosses Win!")
+                }
+                
+                if checkForVictory(NOUGHT)
+                {
+                    noughtsScore += 1
+                    NoughtScore.text = String(noughtsScore)
+                    result(title: "Noughts Win!")
+                }
+        
       if(fullBoard())
         {
           result(title: "Draw")
       }
-    
-    
     }
     
-
+    func checkForVictory(_ s :String) -> Bool
+        {
+            // Horizontal Victory
+            if thisSymbol(a1, s) && thisSymbol(a2, s) && thisSymbol(a3, s)
+            {
+                return true
+            }
+            if thisSymbol(b1, s) && thisSymbol(b2, s) && thisSymbol(b3, s)
+            {
+                return true
+            }
+            if thisSymbol(c1, s) && thisSymbol(c2, s) && thisSymbol(c3, s)
+            {
+                return true
+            }
+            
+            // Vertical Victory
+            if thisSymbol(a1, s) && thisSymbol(b1, s) && thisSymbol(c1, s)
+            {
+                return true
+            }
+            if thisSymbol(a2, s) && thisSymbol(b2, s) && thisSymbol(c2, s)
+            {
+                return true
+            }
+            if thisSymbol(a3, s) && thisSymbol(b3, s) && thisSymbol(c3, s)
+            {
+                return true
+            }
+            
+            // Diagonal Victory
+            if thisSymbol(a1, s) && thisSymbol(b2, s) && thisSymbol(c3, s)
+            {
+                return true
+            }
+            if thisSymbol(a3, s) && thisSymbol(b2, s) && thisSymbol(c1, s)
+            {
+                return true
+            }
+            
+            return false
+        }
+    
+    func thisSymbol(_ button: UIButton, _ symbol: String) -> Bool
+        {
+            return button.title(for: .normal) == symbol
+        }
+    
+    
     func result(title : String)
     {
         

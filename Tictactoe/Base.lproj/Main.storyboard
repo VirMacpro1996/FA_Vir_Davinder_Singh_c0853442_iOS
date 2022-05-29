@@ -174,6 +174,8 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="CrossScore" destination="wAR-oQ-V8l" id="4tk-gx-LZg"/>
+                        <outlet property="NoughtScore" destination="3ox-2c-VII" id="hLV-EX-dnN"/>
                         <outlet property="a1" destination="ohL-Ba-wDr" id="rV8-s6-3rb"/>
                         <outlet property="a2" destination="1lE-8L-Tdf" id="UzY-A2-7pj"/>
                         <outlet property="a3" destination="trQ-gO-rXF" id="nXw-eB-wvz"/>
