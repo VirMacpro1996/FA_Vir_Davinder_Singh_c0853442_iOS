@@ -59,9 +59,66 @@ class ViewController: UIViewController {
             board.append(c3)
         }
     
+    
+    func fullBoard() -> Bool
+        {
+            for button in board
+            {
+                if button.title(for: .normal) == nil
+                {
+                    return false
+                }
+            }
+            return true
+        }
+    
+    
+    
     @IBAction func boardTapAction(_ sender: UIButton) {
         
         addToBoard(sender)
+
+      if(fullBoard())
+        {
+          result(title: "Draw")
+      }
+    
+    
+    }
+    
+
+    func result(title : String)
+    {
+        
+        let ac = UIAlertController(title: title, message: nil, preferredStyle: .actionSheet)
+                ac.addAction(UIAlertAction(title: "Reset", style: .default, handler: { (_) in
+                    self.resetBoard()
+                }))
+                self.present(ac, animated: true)
+    }
+    
+    func resetBoard()
+    {
+        
+        for button in board
+        {
+            button.setTitle(nil, for: .normal)
+            button.isEnabled = true
+        }
+       
+        
+        if firstTurn == Turn.Nought
+                {
+                    firstTurn = Turn.Cross
+                }
+                else if firstTurn == Turn.Cross
+                {
+                    firstTurn = Turn.Nought
+                   
+                }
+                currentTurn = firstTurn
+
+
     }
     
     func addToBoard(_ sender: UIButton)
