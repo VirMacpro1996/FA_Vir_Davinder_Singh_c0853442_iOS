@@ -3,7 +3,7 @@
 //  Tictactoe
 //
 //  Created by Vir Davinder Singh on 2022-05-29.
-//
+
 
 import UIKit
 
@@ -49,8 +49,39 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
        initBoard()
+       swipeGesture()
+        becomeFirstResponder()
+    }
+    
+    func swipeGesture()
+    {
+    let swipe = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_ :)))
+      
+         swipe.direction = .right
+        
+            view.addGestureRecognizer(swipe)
+        
+    }
+    
+    @objc func handleSwipe(_ sender: UISwipeGestureRecognizer)
+    {
+        resetBoard()
     }
 
+
+    override var canBecomeFirstResponder: Bool
+    {
+        return true
+    }
+    
+    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        if motion == .motionShake {
+            
+            let alert = UIAlertController(title: "Detected shake", message: "User shakes", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
+            present(alert, animated: true)
+        }
+    }
     func initBoard()
         {
             board.append(a1)
@@ -196,7 +227,9 @@ class ViewController: UIViewController {
             if(currentTurn == Turn.Nought)
                         {
                
-                sender.setTitle(NOUGHT, for: .normal)
+             sender.setTitle(NOUGHT, for: .normal)
+         //      sender.setBackgroundImage(plus, forState: UIControlState.Normal)
+                
                             currentTurn = Turn.Cross
                         }
                         else if(currentTurn == Turn.Cross)
