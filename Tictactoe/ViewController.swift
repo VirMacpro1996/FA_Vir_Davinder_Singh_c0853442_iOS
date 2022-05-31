@@ -39,18 +39,36 @@ class ViewController: UIViewController {
     
     var firstTurn = Turn.Cross
     var currentTurn = Turn.Cross
+    var lastTurn = Turn.Cross
     
     var NOUGHT =  "O"
+    var noughtImage = UIImage(named: "nought")
+    var crossImage = UIImage(named : "cross")
+    var blank = UIImage(named: "bb")
     var CROSS  =  "X"
     var board = [UIButton]()
     var crossesScore = 0
     var noughtsScore = 0
+    var last = 0
+    var i = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
        initBoard()
        swipeGesture()
         becomeFirstResponder()
+        
+        
+        let background = UIImage(named: "bb1")
+
+                var imageView : UIImageView!
+                imageView = UIImageView(frame: view.bounds)
+        imageView.contentMode =  UIView.ContentMode.scaleAspectFill
+                imageView.clipsToBounds = true
+                imageView.image = background
+        view.addSubview(imageView)
+               self.view.sendSubviewToBack(imageView)
+        
     }
     
     func swipeGesture()
@@ -77,6 +95,27 @@ class ViewController: UIViewController {
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         if motion == .motionShake {
             
+            
+            for button in board
+            {
+                if button.tag == last
+                {
+                    button.setImage(blank, for: .normal)
+                    button.isEnabled = true
+                }
+
+            }
+            if(currentTurn == Turn.Nought)
+                        {
+               
+                            currentTurn = Turn.Cross
+                        }
+                        else if(currentTurn == Turn.Cross)
+                        {
+                            
+                            currentTurn = Turn.Nought
+                        
+                        }
             let alert = UIAlertController(title: "Detected shake", message: "User shakes", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
             present(alert, animated: true)
@@ -93,6 +132,11 @@ class ViewController: UIViewController {
             board.append(c1)
             board.append(c2)
             board.append(c3)
+            
+            for button in board
+            {
+                button.setImage(blank, for: .normal)
+            }
         }
     
     
@@ -100,7 +144,7 @@ class ViewController: UIViewController {
         {
             for button in board
             {
-                if button.title(for: .normal) == nil
+                if button.image(for: .normal) == blank
                 {
                     return false
                 }
@@ -112,9 +156,16 @@ class ViewController: UIViewController {
     
     @IBAction func boardTapAction(_ sender: UIButton) {
         
+        
+        i = i + 1
+        
         addToBoard(sender)
        
-        if checkForVictory(CROSS)
+        sender.tag = i
+        last = i
+        print(sender.tag)
+        print(last)
+        if checkForVictory(crossImage!)
                 {
                     crossesScore += 1
             CrossScore.text = String(crossesScore)
@@ -122,7 +173,7 @@ class ViewController: UIViewController {
             result(title: "Crosses Win!")
                 }
                 
-                if checkForVictory(NOUGHT)
+                if checkForVictory(noughtImage!)
                 {
                     noughtsScore += 1
                     NoughtScore.text = String(noughtsScore)
@@ -135,7 +186,7 @@ class ViewController: UIViewController {
       }
     }
     
-    func checkForVictory(_ s :String) -> Bool
+    func checkForVictory(_ s : UIImage) -> Bool
         {
             // Horizontal Victory
             if thisSymbol(a1, s) && thisSymbol(a2, s) && thisSymbol(a3, s)
@@ -178,31 +229,36 @@ class ViewController: UIViewController {
             return false
         }
     
-    func thisSymbol(_ button: UIButton, _ symbol: String) -> Bool
+    func thisSymbol(_ button: UIButton, _ image: UIImage) -> Bool
         {
-            return button.title(for: .normal) == symbol
+            return button.image(for: .normal) == image
         }
     
     
     func result(title : String)
     {
         
-        let ac = UIAlertController(title: title, message: nil, preferredStyle: .actionSheet)
-                ac.addAction(UIAlertAction(title: "Reset", style: .default, handler: { (_) in
+        let result = UIAlertController(title: title, message: nil, preferredStyle: .actionSheet)
+                result.addAction(UIAlertAction(title: "Reset", style: .default, handler: { (_) in
                     self.resetBoard()
                 }))
-                self.present(ac, animated: true)
+                self.present(result, animated: true)
     }
     
     func resetBoard()
     {
+        i = 0
         
         for button in board
         {
-            button.setTitle(nil, for: .normal)
+           // button.setTitle(nil, for: .normal)
+           button.setImage(blank, for: .normal)
+            
+          // button.setImage(nil, for: .normal)
+         
+            
             button.isEnabled = true
         }
-       
         
         if firstTurn == Turn.Nought
                 {
@@ -222,20 +278,21 @@ class ViewController: UIViewController {
     {
         
         
-        if (sender.title(for: .normal) == nil )
+        if (sender.image(for: .normal) == blank)
         {
             if(currentTurn == Turn.Nought)
                         {
                
-             sender.setTitle(NOUGHT, for: .normal)
-         //      sender.setBackgroundImage(plus, forState: UIControlState.Normal)
+           
+                sender.setImage(noughtImage, for: .normal)
+         
                 
                             currentTurn = Turn.Cross
                         }
                         else if(currentTurn == Turn.Cross)
                         {
-                            sender.setTitle(CROSS, for: .normal)
-                           
+                            
+                            sender.setImage(crossImage , for: .normal)
                             currentTurn = Turn.Nought
                             
                         }
