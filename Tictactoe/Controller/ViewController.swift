@@ -10,12 +10,12 @@ import UIKit
 class ViewController: UIViewController {
 
     
-    enum Turn {
-        
-        case Nought
-        case Cross
-    }
-    
+//    enum Turn {
+//
+//        case Nought
+//        case Cross
+//    }
+//    
     
     @IBOutlet weak var a1: UIButton!
     
@@ -163,8 +163,7 @@ class ViewController: UIViewController {
        
         sender.tag = i
         last = i
-        print(sender.tag)
-        print(last)
+        
         if checkForVictory(crossImage!)
                 {
                     crossesScore += 1
